@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
@@ -23,6 +24,12 @@ public class PlayState extends GameState {
 
 	private int width, height;
 	private Vector sprites = new Vector();
+	
+	public static Font font = Font.getDefaultFont();
+	public static Font largeFont;
+	static {
+		largeFont = Font.getFont(font.getFace(), font.getStyle(), Font.SIZE_LARGE);
+	}
 	
 	int i = 0;
 	public PlayState(String name, MainCanvas canvas, GameLevel game) {
@@ -57,7 +64,7 @@ public class PlayState extends GameState {
         }
         
         for (Enumeration en = sprites.elements(); en.hasMoreElements();) {
-        	ScreenSprite box = (ScreenSprite) en.nextElement();
+        	Overlay box = (Overlay) en.nextElement();
         	box.paint(g);
         }
         
@@ -65,7 +72,8 @@ public class PlayState extends GameState {
         g.setColor(255, 0, 0);
         g.drawLine(line[0], height - line[1] + yPos, line[2], height - line[3] + yPos);
         
-        g.setColor(0);
+        g.setFont(font);
+        g.setColor(~0);
         g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);
 	}
 
@@ -81,13 +89,13 @@ public class PlayState extends GameState {
 		}
  	}
 	
-	public void addSprite(ScreenSprite sprite) {
+	public void addSprite(Overlay sprite) {
 		sprite.setPlayState(this);
 		addClickable(sprite);
 		sprites.addElement(sprite);
 	}
 	
-	public void removeSprite(ScreenSprite sprite) {
+	public void removeSprite(Overlay sprite) {
 		sprites.removeElement(sprite);
 		removeClickable(sprite);
 	}

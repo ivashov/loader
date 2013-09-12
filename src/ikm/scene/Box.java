@@ -25,8 +25,7 @@ public class Box extends SceneObject {
 	public Box(int w, int h) {
 		width = w;
 		height = h;
-	}
-	
+	}	
 	
 	public float getScale() {
 		return width / 100.0f;

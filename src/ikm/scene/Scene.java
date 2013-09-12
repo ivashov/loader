@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import at.emini.physics2D.Body;
+import at.emini.physics2D.Contact;
 import at.emini.physics2D.Shape;
 import at.emini.physics2D.Spring;
 import at.emini.physics2D.World;
@@ -64,6 +65,18 @@ public class Scene {
 	
 	public synchronized void update() {
 		world.tick();
+		/*System.out.println(objects.size());
+		
+		if (objects.size() > 1) {
+			Box box = (Box) objects.elementAt(0);
+			
+			Body body = (Body) box.getData();
+			Contact[] cont = body.getContacts();
+			System.out.println(cont.length);
+			for (int i = 0; i < cont.length; i++) {
+				System.out.println(" " + cont[i]);
+			}
+		}*/
 		
 		for (Enumeration en = objects.elements(); en.hasMoreElements();) {
 			SceneObject box = (SceneObject) en.nextElement();
@@ -175,5 +188,17 @@ public class Scene {
 			line[2] = v2.xAsInt();
 			line[3] = v2.yAsInt();
 		}
+	}
+	
+	public int calculateHeight(int lowLimit) {
+		int maxY = lowLimit;
+		for (Enumeration en = objects.elements(); en.hasMoreElements();) {
+			SceneObject obj = (SceneObject) en.nextElement();
+			
+			if (obj instanceof Box && obj != dragedBox && obj.getY() > maxY/* && ((Body) obj.getData()).getContacts().length > 0*/) {
+				maxY = (int) obj.getY();
+			}
+		}
+		return maxY;
 	}
 }
