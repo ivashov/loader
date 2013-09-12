@@ -1,5 +1,6 @@
 package ikm;
 
+import ikm.level.TowerLevel;
 import ikm.state.PlayState;
 
 import javax.microedition.lcdui.Command;
@@ -33,7 +34,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 		canvas.addCommand(back);
 		
 		display = Display.getDisplay(this);
-		GameState playState = new PlayState("Play", canvas);
+		GameState playState = new PlayState("Play", canvas, new TowerLevel());
 		canvas.pushState(playState);
 		display.setCurrent(canvas);
 		

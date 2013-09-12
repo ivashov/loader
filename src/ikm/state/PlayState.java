@@ -2,65 +2,44 @@ package ikm.state;
 
 import java.io.IOException;
 import java.util.Enumeration;
-import java.util.Random;
+import java.util.Vector;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import javax.microedition.m2g.SVGImage;
-import javax.microedition.m2g.ScalableGraphics;
 
-import org.w3c.dom.svg.SVGElement;
-import org.w3c.dom.svg.SVGPath;
-import org.w3c.dom.svg.SVGRGBColor;
-import org.w3c.dom.svg.SVGRect;
-import org.w3c.dom.svg.SVGSVGElement;
-
+import ikm.GameLevel;
 import ikm.GameState;
 import ikm.MainCanvas;
 import ikm.scene.Box;
 import ikm.scene.Scene;
+import ikm.scene.SceneObject;
+import ikm.util.Maths;
 
 public class PlayState extends GameState {
-    private ScalableGraphics sg;
-    private SVGImage svgImage;
     private Scene scene;
-	private SVGSVGElement rootElement;
-	private Image boxesImage;
-	public final int DEGREE_STEP = 4;
-	private int height;
+	private int yPos = 0;
+	private Image background;
+	private GameLevel game;
+
+	private int width, height;
+	private Vector sprites = new Vector();
 	
 	int i = 0;
-	public PlayState(String name, MainCanvas canvas) {
+	public PlayState(String name, MainCanvas canvas, GameLevel game) {
 		super(name, canvas);
 		scene = new Scene(canvas.getHeight());
-		sg = ScalableGraphics.createInstance();
-		sg.setRenderingQuality(ScalableGraphics.RENDERING_QUALITY_LOW);
-		height = canvas.getHeight();
+		this.game = game;
 		createImage();
 		
-		try {
-			boxesImage = Image.createImage("/out.gif");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		width = canvas.getWidth();
+		height = canvas.getHeight();
+		
+		game.initialize(scene, this, width, height);
 	}
-	
-	long t = System.currentTimeMillis() - 8000;
-	long tt;
-
-	
 	
 	public void update() {
-		if (System.currentTimeMillis() - t > 8000) {
-			t = System.currentTimeMillis();
-			scene.addBox(new Box(50, 50), 120, 270);
-		}
-		
+		game.update(0, yPos);
 		scene.update();
-	}
-	
-	private int mod(int a, int b) {
-		return (b + (a % b)) % b;
 	}
 	
 	private int[] line = new int[4];
@@ -68,88 +47,98 @@ public class PlayState extends GameState {
         g.setColor(127, 127, 255);
         
         g.fillRect(0, 0, g.getClipWidth(), g.getClipHeight());
-
-        sg.bindTarget(g);
-        sg.setTransparency(1f);
+        int imgpos = Maths.clamp(background.getHeight() - yPos - height, 0, background.getHeight() - height);
+        g.drawRegion(background, 0, imgpos, width, height, 0, 0, 0, Graphics.TOP | Graphics.LEFT);
         
         long ttt = System.currentTimeMillis();
         for (Enumeration en = scene.getBoxes().elements(); en.hasMoreElements();) {
-        	Box box = (Box) en.nextElement();
-			if (true) {
-				int x = (int) box.getX();
-				int y = height - (int) box.getY();
-				int rotation = 360 - (int) box.getRotate();
-				
-				rotation = (mod(rotation, 360) + DEGREE_STEP / 2) / DEGREE_STEP;
-				if (rotation == 360 / DEGREE_STEP)
-					rotation = 0;
-				
-				int u = rotation % 10;
-				int v = rotation / 10;
-				g.drawRegion(boxesImage, u * 75, v * 75, 75, 75, 0, x, y,
-						Graphics.VCENTER | Graphics.HCENTER);
-			} else {
-				rootElement.getCurrentTranslate().setX(box.getX());
-				rootElement.getCurrentTranslate().setY(box.getY());
-				rootElement.setCurrentScale(box.getScale());
-				rootElement.setCurrentRotate(box.getRotate());
-				sg.render(0, 0, svgImage);
-			}
+        	SceneObject box = (SceneObject) en.nextElement();
+        	box.paint(g, height, 0, yPos);
+        }
+        
+        for (Enumeration en = sprites.elements(); en.hasMoreElements();) {
+        	ScreenSprite box = (ScreenSprite) en.nextElement();
+        	box.paint(g);
         }
         
         scene.getJoint(line);
         g.setColor(255, 0, 0);
-        g.drawLine(line[0], height - line[1], line[2], height - line[3]);
+        g.drawLine(line[0], height - line[1] + yPos, line[2], height - line[3] + yPos);
         
         g.setColor(0);
-        g.drawString(String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);
-        sg.releaseTarget();
+        g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);
 	}
 
 	public int getUpdateRate() {
 		return 50;
 	}
 	
-	private void createImage() {		
+	private void createImage() {	
 		try {
-			svgImage = (SVGImage) SVGImage.createImage(getClass().getResourceAsStream("/box1.svg"), null);
+			background = Image.createImage("/background.png");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		svgImage.setViewportHeight(canvas.getHeight());
-		svgImage.setViewportWidth(canvas.getWidth());
-		
-		rootElement = (SVGSVGElement) (svgImage.getDocument().getDocumentElement());
-		rootElement.getCurrentTranslate().setX(75);
-		rootElement.getCurrentTranslate().setY(75);
  	}
 	
+	public void addSprite(ScreenSprite sprite) {
+		sprite.setPlayState(this);
+		addClickable(sprite);
+		sprites.addElement(sprite);
+	}
+	
+	public void removeSprite(ScreenSprite sprite) {
+		sprites.removeElement(sprite);
+		removeClickable(sprite);
+	}
+	
+	private int dragStartX;
+	private int dragStartY;
+	private boolean drag = false;
+	
 	public boolean clicked(int x, int y) {
-		y = height - y;
-		
-		Box box = scene.selectBox(x, y);
-		
-		if (box != null) {
-			scene.startDragBox(box, x, y);
+		if (super.clicked(x, y)) {
 			return true;
 		}
 		
-		return super.clicked(x, y);
+		int yy = height - y + yPos;
+		
+		SceneObject object = scene.selectObject(x, yy);
+		
+		if (object != null) {
+			scene.startDragBox(object, x, yy);
+			return true;
+		} else {
+			drag = true;
+			dragStartX = x;
+			dragStartY = y;
+		}
+		
+		return true;
 	}
 	
 	public boolean released(int x, int y) {
-		y = height - y;
+		int yy = height - y + yPos;
 		
 		scene.releaseBox();
+		drag = false;
 		
-		return super.released(x, y);
+		return super.released(x, yy);
 	}
 	
 	public boolean dragged(int x, int y) {
-		y = height - y;
+		int yy = height - y + yPos;
+		scene.dragBox(x, yy);
 		
-		scene.dragBox(x, y);
+		if (drag) {
+			yPos += y - dragStartY;
+			if (yPos < 0)
+				yPos = 0;
+			
+			dragStartY = y;
+			dragStartX = x;
+		}
+		
 		return super.dragged(x, y);
 	}
 }

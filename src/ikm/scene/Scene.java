@@ -1,14 +1,9 @@
 package ikm.scene;
 
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.microedition.lcdui.Image;
-
 import at.emini.physics2D.Body;
-import at.emini.physics2D.Constraint;
-import at.emini.physics2D.Joint;
 import at.emini.physics2D.Shape;
 import at.emini.physics2D.Spring;
 import at.emini.physics2D.World;
@@ -21,30 +16,19 @@ public class Scene {
 	
 	public Scene(int h) {
 		world.setGravity(new FXVector(0, FXUtil.toFX(-39 * 4)));
-		System.out.println(world.getDampingLateralFX() >> FXUtil.DECIMAL);
 		world.setDampingLateralFX(FXUtil.divideFX(FXUtil.toFX(1), FXUtil.toFX(100)));
-		Shape boxShape = Shape.createRectangle(240, 10);
-		boxShape.setFriction(100);
-		Body boxBody = new Body(120, h - 10, boxShape, false);
-		world.addBody(boxBody);
+		
+		Shape boxShape;
+		Body boxBody;
 		
 		boxShape = Shape.createRectangle(240, 10);
 		boxShape.setFriction(100);
 		boxBody = new Body(120, 5, boxShape, false);
 		world.addBody(boxBody);
-		
-		boxShape = Shape.createRectangle(10, h);
-		boxShape.setFriction(100);
-		boxBody = new Body(5, h / 2, boxShape, false);
-		world.addBody(boxBody);
-		
-		boxShape = Shape.createRectangle(10, h);
-		boxShape.setFriction(100);
-		boxBody = new Body(240 - 5, h / 2, boxShape, false);
-		world.addBody(boxBody);
 	}
 	
-	public void addBox(Box box, int x, int y) {
+	public void addBox(int x, int y) {
+		Box box = new Box(50, 50);
 		objects.addElement(box);
 		Shape boxShape = Shape.createRectangle(box.getWidth(), box.getHeight());
 		Body boxBody = new Body(x, y, boxShape, true);
@@ -53,6 +37,8 @@ public class Scene {
 		boxShape.setMass(150);
 		world.addBody(boxBody);
 		box.setData(boxBody);
+		
+		updateObject(box);
 	}
 	
 	public Vector getBoxes() {
@@ -66,22 +52,22 @@ public class Scene {
 		return intPart + floatPart / (float) (1 << FXUtil.DECIMAL);
 	}
 	
-	private float rad2deg(float rad) {
-		return 180 * rad / (float) Math.PI;
+	private void updateObject(SceneObject object) {
+		Body body = (Body) object.getData();
+		
+		int rotation = FXUtil.angleInDegrees2FX(body.rotation2FX());
+		FXVector pos = body.positionFX();
+
+		object.setRotation(rotation);
+		object.setPosition(fx2float(pos.xFX), fx2float(pos.yFX));
 	}
 	
 	public synchronized void update() {
 		world.tick();
 		
 		for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-			Box box = (Box) en.nextElement();
-			Body body = (Body) box.getData();
-			
-			int rotation = FXUtil.angleInDegrees2FX(body.rotation2FX());
-			FXVector pos = body.positionFX();
-			
-			box.setRotation(rotation);
-			box.setPosition(fx2float(pos.xFX), fx2float(pos.yFX));
+			SceneObject box = (SceneObject) en.nextElement();
+			updateObject(box);
 		}
 	}
 	
@@ -117,22 +103,19 @@ public class Scene {
 		return a1 + a2 + a3 + a4 <= box.getWidth() * box.getHeight();
 	}
 	
-	public Box selectBox(int px, int py) {
+	public SceneObject selectObject(int px, int py) {
 		int xx = px << FXUtil.DECIMAL;
 		int yy = py << FXUtil.DECIMAL;
 		
 		Body body = world.findBodyAt(xx, yy);
 		if (body == null)
 			return null;
-		
+
 		for (Enumeration en = objects.elements(); en.hasMoreElements();) {
-			Box box = (Box) en.nextElement();
-			/*if (pointInRect(px, py, box)) {
-				System.out.println("OK");
-				return box;
-			}*/
-			if (box.getData().equals(body)) {
-				return box;
+			SceneObject object = (SceneObject) en.nextElement();
+
+			if (object.getData().equals(body)) {
+				return object;
 			}
 		}
 		
@@ -141,11 +124,9 @@ public class Scene {
 	
 	private Spring dragJoint;
 	private Body dragBody;
-	private Box dragedBox;
+	private SceneObject dragedBox;
 	
-	public synchronized void startDragBox(Box box, int x, int y) {
-		System.out.println("Start drag box");
-		
+	public synchronized void startDragBox(SceneObject box, int x, int y) {
 		Body body = (Body) box.getData();
 		//body.setGravityAffected(false);
 		

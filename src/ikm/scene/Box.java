@@ -1,38 +1,32 @@
 package ikm.scene;
 
-public class Box {
+import java.io.IOException;
+
+import ikm.util.Maths;
+
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+
+public class Box extends SceneObject {
+	private static Image boxesImage;
+	static {
+		try {
+			boxesImage = Image.createImage("/out.gif");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public final int DEGREE_STEP = 4;
 	private int width;
 	private int height;
-	private float rotation;
-	private Object data;
 	
-	private float x, y;
 	
 	public Box(int w, int h) {
 		width = w;
 		height = h;
 	}
 	
-	public void setPosition(float x, float y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	public void setRotation(float r) {
-		rotation = r;
-	}
-	
-	public float getX() {
-		return x;
-	}
-	
-	public float getY() {
-		return y;
-	}
-	
-	public float getRotate() {
-		return rotation;
-	}
 	
 	public float getScale() {
 		return width / 100.0f;
@@ -46,12 +40,22 @@ public class Box {
 		return height;
 	}
 	
-	public void setData(Object obj) {
-		this.data = obj;
+	public void paint(Graphics g, int height, int xPos, int yPos) {
+		int x = (int) this.x;
+		int y = height - (int) this.y + yPos;
+		int rotation = 360 - (int) this.rotation;
+		
+		rotation = (Maths.mod(rotation, 360) + DEGREE_STEP / 2) / DEGREE_STEP;
+		if (rotation == 360 / DEGREE_STEP)
+			rotation = 0;
+		
+		int u = rotation % 10;
+		int v = rotation / 10;
+		g.drawRegion(boxesImage, u * 75, v * 75, 75, 75, 0, x, y,
+				Graphics.VCENTER | Graphics.HCENTER);
 	}
 	
-	public Object getData() {
-		return data;
+	public boolean isDragable() {
+		return true;
 	}
-	
 }
