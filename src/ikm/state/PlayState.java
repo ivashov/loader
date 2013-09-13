@@ -11,6 +11,7 @@ import javax.microedition.lcdui.Image;
 import ikm.GameLevel;
 import ikm.GameState;
 import ikm.MainCanvas;
+import ikm.Res;
 import ikm.scene.Box;
 import ikm.scene.Scene;
 import ikm.scene.SceneObject;
@@ -20,11 +21,9 @@ import ikm.util.Maths;
 public class PlayState extends GameState {
     private Scene scene;
 	private int yPos = 0;
-	private Image background;
 	private GameLevel game;
 
 	private int width, height;
-	private Vector sprites = new Vector();
 	
 	public static Font font = Font.getDefaultFont();
 	public static Font largeFont;
@@ -37,7 +36,6 @@ public class PlayState extends GameState {
 		super(name, canvas);
 		scene = new Scene(canvas.getHeight());
 		this.game = game;
-		createImage();
 		
 		width = canvas.getWidth();
 		height = canvas.getHeight();
@@ -52,18 +50,13 @@ public class PlayState extends GameState {
 	
 	private int[] line = new int[4];
 	public void paint(Graphics g) {
-        int imgpos = Maths.clamp(background.getHeight() - yPos - height, 0, background.getHeight() - height);
-        g.drawRegion(background, 0, imgpos, width, height, 0, 0, 0, Graphics.TOP | Graphics.LEFT);
+        int imgpos = Maths.clamp(Res.background.getHeight() - yPos - height, 0, Res.background.getHeight() - height);
+        g.drawRegion(Res.background, 0, imgpos, width, height, 0, 0, 0, Graphics.TOP | Graphics.LEFT);
         
         long ttt = System.currentTimeMillis();
         for (Enumeration en = scene.getBoxes().elements(); en.hasMoreElements();) {
         	SceneObject box = (SceneObject) en.nextElement();
         	box.paint(g, height, 0, yPos);
-        }
-        
-        for (Enumeration en = sprites.elements(); en.hasMoreElements();) {
-        	Overlay box = (Overlay) en.nextElement();
-        	box.paint(g);
         }
         
         scene.getJoint(line);
@@ -72,30 +65,13 @@ public class PlayState extends GameState {
         
         g.setFont(font);
         g.setColor(~0);
-        g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);
+        
+		super.paint(g);
+        g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);	
 	}
 
 	public int getUpdateRate() {
 		return 50;
-	}
-	
-	private void createImage() {	
-		try {
-			background = Image.createImage("/background.png");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
- 	}
-	
-	public void addSprite(Overlay sprite) {
-		sprite.setPlayState(this);
-		addClickable(sprite);
-		sprites.addElement(sprite);
-	}
-	
-	public void removeSprite(Overlay sprite) {
-		sprites.removeElement(sprite);
-		removeClickable(sprite);
 	}
 	
 	private int dragStartX;

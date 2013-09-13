@@ -1,5 +1,7 @@
 package ikm;
 
+import ikm.state.play.Overlay;
+
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -14,7 +16,8 @@ public abstract class GameState {
 	
 	protected MainCanvas canvas;
 	private GameState parent;
-	
+	private Vector sprites = new Vector();
+
 	public interface Clickable {
 		boolean clicked(int x, int y);
 	}
@@ -91,9 +94,24 @@ public abstract class GameState {
 	public boolean needExtraRedraw() {
 		return false;
 	}
+	
+	public void addOverlay(Overlay sprite) {
+		addClickable(sprite);
+		sprites.addElement(sprite);
+	}
+	
+	public void removeOverlay(Overlay sprite) {
+		sprites.removeElement(sprite);
+		removeClickable(sprite);
+	}
 		
 	public abstract void update();
-	public abstract void paint(Graphics g);
+	public void paint(Graphics g) {
+        for (Enumeration en = sprites.elements(); en.hasMoreElements();) {
+        	Overlay box = (Overlay) en.nextElement();
+        	box.paint(g);
+        }
+	}
 	public abstract int getUpdateRate();
 	public void shutdown() {}
 }

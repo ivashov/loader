@@ -18,6 +18,23 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 	private Display display;
 	private Command back = new Command("Back", Command.BACK, 0);
 	
+	{
+	   	new Thread() {
+			public void run() {
+				while (true) {
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					System.gc();
+					System.out.println("" + (Runtime.getRuntime().freeMemory() / 1024) + "/" + (Runtime.getRuntime().totalMemory() /  1024));
+				}
+			}
+		}.start();
+		}
+	
+	
 	public LoaderMain() {
 	}
 
@@ -26,7 +43,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 		if (canvas != null)
 			canvas.stop();
 	}
-
+	
 	protected void pauseApp() {
 
 	}
@@ -45,7 +62,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 		
 		
 		//GameState playState = new PlayState("Play", canvas, new TowerLevel());
-		GameState playState = new MainMenuState("Menu", canvas);
+		GameState playState = new MainMenuState("Menu", canvas, this);
 		canvas.pushState(playState);
 		display.setCurrent(canvas);
 		

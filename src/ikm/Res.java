@@ -9,12 +9,18 @@ public class Res {
 	public static Image scoreText;
 	public static Image exitText;
 	public static Image logo;
-	
+	public static Image background;
+	public static Image boxImage;
+
 	public static void initialize() throws IOException {
 		newgameText = Image.createImage("/text/newgame.png");
 		scoreText = Image.createImage("/text/highscore.png");
 		exitText = Image.createImage("/text/exit.png");
 	
 		logo = Image.createImage("/text/loader.png");
+	
+		background = Image.createImage("/background.png");
+	
+		boxImage = Image.createImage("/box.png");
 	}
 }

@@ -11,7 +11,6 @@ import ikm.util.Maths;
 public abstract class Overlay implements Clickable {
 	protected int y;
 	protected int x;
-	protected PlayState playState;
 	private SpriteListener listener;
 
 	public Overlay(int x, int y) {
@@ -19,12 +18,8 @@ public abstract class Overlay implements Clickable {
 		this.y = y;
 	}
 	
-	public void setPlayState(PlayState playState) {
-		this.playState = playState;
-	}
-	
 	public boolean clicked(int xx, int yy) {
-		if (hits(xx, yy)) {
+		if (listener != null && hits(xx, yy)) {
 			return listener.clicked(this);
 		}
 		

@@ -8,6 +8,7 @@ import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
 
 import ikm.GameLevel;
+import ikm.Res;
 import ikm.scene.Scene;
 import ikm.state.PlayState;
 import ikm.state.play.Overlay;
@@ -18,7 +19,6 @@ import ikm.state.play.TextOverlay;
 public class TowerLevel extends GameLevel {
 	private Scene scene;
 	private PlayState state;
-	private Image boxImage;
 	private boolean floatingBoxActive = false;
 
 	private long t = System.currentTimeMillis() - 3000;
@@ -35,15 +35,9 @@ public class TowerLevel extends GameLevel {
 		this.width = width;
 		this.height = height;
 
-		try {
-			boxImage = Image.createImage("/box.png");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
 		scoreOverlay = new TextOverlay("Height: 0", width, 0,
 				Font.getDefaultFont(), Graphics.TOP | Graphics.RIGHT);
-		state.addSprite(scoreOverlay);
+		state.addOverlay(scoreOverlay);
 	}
 
 	public void update(int xPos, int yPos) {
@@ -68,13 +62,13 @@ public class TowerLevel extends GameLevel {
 	}
 
 	private void createBoxSprite() {
-		Sprite sprite = new Sprite(boxImage);
+		Sprite sprite = new Sprite(Res.boxImage);
 		final Overlay overlay = new SpriteOverlay(sprite, 5, 5);
-		state.addSprite(overlay);
+		state.addOverlay(overlay);
 		overlay.setSpriteListener(new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
 				scene.addBox(30, yPos + height - 30);
-				state.removeSprite(overlay);
+				state.removeOverlay(overlay);
 				floatingBoxActive = false;
 				t = System.currentTimeMillis();
 				return false;
