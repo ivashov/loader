@@ -61,7 +61,7 @@ public class Scene {
 		FXVector pos = body.positionFX();
 
 		object.setRotation(rotation);
-		object.setPosition(fx2float(pos.xFX), fx2float(pos.yFX));
+		object.setPosition(pos.xAsInt(), pos.yAsInt());
 	}
 	
 	public synchronized void update() {

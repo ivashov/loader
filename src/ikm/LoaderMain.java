@@ -27,7 +27,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					System.gc();
+
 					System.out.println("" + (Runtime.getRuntime().freeMemory() / 1024) + "/" + (Runtime.getRuntime().totalMemory() /  1024));
 				}
 			}

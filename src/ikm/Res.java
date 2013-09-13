@@ -20,7 +20,6 @@ public class Res {
 		logo = Image.createImage("/text/loader.png");
 	
 		background = Image.createImage("/background.png");
-	
 		boxImage = Image.createImage("/box.png");
 	}
 }

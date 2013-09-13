@@ -7,8 +7,8 @@ public abstract class SceneObject {
 	public abstract boolean isDragable();
 	private Object data;
 	
-	protected float rotation;
-	protected float x, y;
+	protected int rotation;
+	protected int x, y;
 
 	public void setData(Object obj) {
 		this.data = obj;
@@ -18,25 +18,24 @@ public abstract class SceneObject {
 		return data;
 	}
 	
-	public void setPosition(float x, float y) {
+	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public void setRotation(float r) {
+	public void setRotation(int r) {
 		rotation = r;
 	}
 	
-	public float getX() {
+	public int getX() {
 		return x;
 	}
 	
-	public float getY() {
+	public int getY() {
 		return y;
 	}
 	
 	public float getRotate() {
 		return rotation;
 	}
-
 }
