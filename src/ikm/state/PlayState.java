@@ -14,6 +14,7 @@ import ikm.MainCanvas;
 import ikm.scene.Box;
 import ikm.scene.Scene;
 import ikm.scene.SceneObject;
+import ikm.state.play.Overlay;
 import ikm.util.Maths;
 
 public class PlayState extends GameState {
@@ -51,9 +52,6 @@ public class PlayState extends GameState {
 	
 	private int[] line = new int[4];
 	public void paint(Graphics g) {
-        g.setColor(127, 127, 255);
-        
-        g.fillRect(0, 0, g.getClipWidth(), g.getClipHeight());
         int imgpos = Maths.clamp(background.getHeight() - yPos - height, 0, background.getHeight() - height);
         g.drawRegion(background, 0, imgpos, width, height, 0, 0, 0, Graphics.TOP | Graphics.LEFT);
         

@@ -18,6 +18,7 @@ public class Scene {
 	public Scene(int h) {
 		world.setGravity(new FXVector(0, FXUtil.toFX(-39 * 4)));
 		world.setDampingLateralFX(FXUtil.divideFX(FXUtil.toFX(1), FXUtil.toFX(100)));
+		world.setDampingRotationalFX(FXUtil.divideFX(FXUtil.toFX(1), FXUtil.toFX(7000)));
 		
 		Shape boxShape;
 		Body boxBody;
@@ -190,12 +191,23 @@ public class Scene {
 		}
 	}
 	
+	private int countContacts(Body body) {
+		Contact[] cont = world.getContactsForBody(body);
+		
+		int c = 0;
+		for (int i = 0; i < cont.length; i++) {
+			if (cont[i] != null)
+				c++;
+		}
+		return c;
+	}
+	
 	public int calculateHeight(int lowLimit) {
 		int maxY = lowLimit;
 		for (Enumeration en = objects.elements(); en.hasMoreElements();) {
 			SceneObject obj = (SceneObject) en.nextElement();
 			
-			if (obj instanceof Box && obj != dragedBox && obj.getY() > maxY/* && ((Body) obj.getData()).getContacts().length > 0*/) {
+			if (obj instanceof Box && obj != dragedBox && obj.getY() > maxY && countContacts((Body) obj.getData()) > 0) {
 				maxY = (int) obj.getY();
 			}
 		}

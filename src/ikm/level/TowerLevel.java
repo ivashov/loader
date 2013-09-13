@@ -10,10 +10,10 @@ import javax.microedition.lcdui.game.Sprite;
 import ikm.GameLevel;
 import ikm.scene.Scene;
 import ikm.state.PlayState;
-import ikm.state.Overlay;
-import ikm.state.SpriteListener;
-import ikm.state.SpriteOverlay;
-import ikm.state.TextOverlay;
+import ikm.state.play.Overlay;
+import ikm.state.play.SpriteListener;
+import ikm.state.play.SpriteOverlay;
+import ikm.state.play.TextOverlay;
 
 public class TowerLevel extends GameLevel {
 	private Scene scene;

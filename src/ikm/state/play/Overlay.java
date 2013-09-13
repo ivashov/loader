@@ -1,10 +1,11 @@
-package ikm.state;
+package ikm.state.play;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.game.Sprite;
 
 import ikm.GameState;
 import ikm.GameState.Clickable;
+import ikm.state.PlayState;
 import ikm.util.Maths;
 
 public abstract class Overlay implements Clickable {
@@ -18,7 +19,7 @@ public abstract class Overlay implements Clickable {
 		this.y = y;
 	}
 	
-	void setPlayState(PlayState playState) {
+	public void setPlayState(PlayState playState) {
 		this.playState = playState;
 	}
 	

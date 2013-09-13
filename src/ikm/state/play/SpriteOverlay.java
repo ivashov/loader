@@ -1,4 +1,4 @@
-package ikm.state;
+package ikm.state.play;
 
 import ikm.util.Maths;
 

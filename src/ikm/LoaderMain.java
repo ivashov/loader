@@ -1,6 +1,9 @@
 package ikm;
 
+import java.io.IOException;
+
 import ikm.level.TowerLevel;
+import ikm.state.MainMenuState;
 import ikm.state.PlayState;
 
 import javax.microedition.lcdui.Command;
@@ -16,12 +19,12 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 	private Command back = new Command("Back", Command.BACK, 0);
 	
 	public LoaderMain() {
-		
 	}
 
 	protected void destroyApp(boolean unconditional)
 			throws MIDletStateChangeException {
-		canvas.stop();
+		if (canvas != null)
+			canvas.stop();
 	}
 
 	protected void pauseApp() {
@@ -29,12 +32,20 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 	}
 
 	protected void startApp() throws MIDletStateChangeException {
+		try {
+			Res.initialize();
+		} catch (IOException e) {
+			throw new MIDletStateChangeException("Can't load resources");
+		}
 		canvas = new MainCanvas(this);
 		canvas.setCommandListener(this);
 		canvas.addCommand(back);
 		
 		display = Display.getDisplay(this);
-		GameState playState = new PlayState("Play", canvas, new TowerLevel());
+		
+		
+		//GameState playState = new PlayState("Play", canvas, new TowerLevel());
+		GameState playState = new MainMenuState("Menu", canvas);
 		canvas.pushState(playState);
 		display.setCurrent(canvas);
 		

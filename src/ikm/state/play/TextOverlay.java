@@ -1,4 +1,4 @@
-package ikm.state;
+package ikm.state.play;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
