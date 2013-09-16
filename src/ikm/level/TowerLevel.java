@@ -1,14 +1,18 @@
 package ikm.level;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import javax.microedition.lcdui.game.Sprite;
 
+import at.emini.physics2D.Collision;
+
 import ikm.GameLevel;
 import ikm.Res;
+import ikm.Score;
 import ikm.scene.Scene;
 import ikm.state.PlayState;
 import ikm.state.play.Overlay;
@@ -28,6 +32,11 @@ public class TowerLevel extends GameLevel {
 	private int xPos, yPos;
 	private TextOverlay scoreOverlay;
 	private int maxHeight = 0;
+	private Score score;
+
+	public TowerLevel(Score score) {
+		this.score = score;
+	}
 
 	public void initialize(Scene scene, PlayState state, int width, int height) {
 		this.scene = scene;
@@ -53,10 +62,14 @@ public class TowerLevel extends GameLevel {
 		if (time - lastHeightCheck > 1000) {
 			lastHeightCheck = time;
 			
-			int height = scene.calculateHeight(maxHeight);
+			int height = scene.calculateHeight(0);
 			if (height > maxHeight) {
 				maxHeight = height;
 				scoreOverlay.setText("Height: " + maxHeight);
+			}
+			
+			if (maxHeight - height > 100) {
+				state.finished(maxHeight, score);
 			}
 		}
 	}

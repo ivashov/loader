@@ -87,7 +87,7 @@ public abstract class GameState {
 	protected void renderParent(Graphics g) {
 		if (parent != null) {
 			parent.render(g, null);
-			g.drawImage(canvas.getTransparentImage(), 0, 0, Graphics.TOP | Graphics.LEFT);
+			//g.drawImage(canvas.getTransparentImage(), 0, 0, Graphics.TOP | Graphics.LEFT);
 		}
 	}
 	

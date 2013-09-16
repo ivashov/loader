@@ -13,6 +13,7 @@ import at.emini.physics2D.util.FXVector;
 
 public class Scene {
 	private final Vector objects = new Vector();
+	private final Vector objectsToRemove = new Vector();
 	private final World world = new World();
 	
 	public Scene(int h) {
@@ -62,6 +63,17 @@ public class Scene {
 
 		object.setRotation(rotation);
 		object.setPosition(pos.xAsInt(), pos.yAsInt());
+		
+		if (pos.yAsInt() < -100 && dragedBox != object) {
+			objectsToRemove.addElement(object);
+		}
+	}
+	
+	private void removeObject(SceneObject object) {
+		Body body = (Body) object.getData();
+		world.removeBody(body);
+		objects.removeElement(object);
+		System.out.println("Object removed");
 	}
 	
 	public synchronized void update() {
@@ -83,6 +95,13 @@ public class Scene {
 			SceneObject box = (SceneObject) en.nextElement();
 			updateObject(box);
 		}
+		
+		for (Enumeration en = objectsToRemove.elements(); en.hasMoreElements();) {
+			SceneObject box = (SceneObject) en.nextElement();
+			removeObject(box);
+		}
+		
+		objectsToRemove.setSize(0);
 	}
 	
 	private int triangleArea(int x1, int y1, int x2, int y2, int x3, int y3) {

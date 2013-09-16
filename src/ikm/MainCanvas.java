@@ -105,7 +105,6 @@ public class MainCanvas extends GameCanvas implements Runnable {
 	
 	private void safeRun() {
 		g = getGraphics();
-		darkImage = generateTransparentImage();
 		gameTime = System.currentTimeMillis();
 		
 		while (cont) {
@@ -149,19 +148,6 @@ public class MainCanvas extends GameCanvas implements Runnable {
 			g.drawString(/*Translation.tr(*/"Back"/*)*/, posX, posY, Graphics.BOTTOM | Graphics.RIGHT);
 		} else
 			backVisible = false;
-	}
-	
-	private Image generateTransparentImage() {
-		int[] rgb = new int[getWidth() * getHeight()];
-		for (int i = 0; i < rgb.length; i++)
-			rgb[i] = 0xcb000010;
-		
-		Image img = Image.createRGBImage(rgb, getWidth(), getHeight(), true);
-		return img;
-	}
-	
-	public Image getTransparentImage() {
-		return darkImage;
 	}
 	
 	public boolean back() {

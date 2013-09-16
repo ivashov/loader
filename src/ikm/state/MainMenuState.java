@@ -7,6 +7,7 @@ import ikm.GameState;
 import ikm.LoaderMain;
 import ikm.MainCanvas;
 import ikm.Res;
+import ikm.Score;
 import ikm.level.TowerLevel;
 import ikm.state.play.Overlay;
 import ikm.state.play.SpriteListener;
@@ -20,6 +21,7 @@ public class MainMenuState extends GameState {
 	
 	private int width, height;
 	private LoaderMain main;
+	private Score score = new Score();
 	
 	private void addItem(Sprite sprite, int yPos, SpriteListener listener) {
 		SpriteOverlay o;
@@ -35,7 +37,7 @@ public class MainMenuState extends GameState {
 
 		addItem(newgameSprite, 128, new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
-				GameState playState = new PlayState("Play", canvas, new TowerLevel());
+				GameState playState = new PlayState("Play", canvas, new TowerLevel(score));
 				canvas.pushState(playState);
 				
 				return true;
@@ -44,6 +46,12 @@ public class MainMenuState extends GameState {
 		
 		addItem(scoreSprite, 128 + 48, new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
+				GameState state = new HighscoreState("Highscore", canvas, score);
+				canvas.pushState(state);
+				
+				//GameState state = new RecordState("New record", canvas, 10, score); 
+				//canvas.pushState(state);
+				
 				return true;
 			}
 		});
@@ -56,6 +64,8 @@ public class MainMenuState extends GameState {
 		});
 		
 		addItem(logo, 32, null);
+		
+		score.loadScore();
 	}
 
 	public void update() {

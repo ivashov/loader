@@ -12,6 +12,7 @@ import ikm.GameLevel;
 import ikm.GameState;
 import ikm.MainCanvas;
 import ikm.Res;
+import ikm.Score;
 import ikm.scene.Box;
 import ikm.scene.Scene;
 import ikm.scene.SceneObject;
@@ -122,5 +123,11 @@ public class PlayState extends GameState {
 		}
 		
 		return super.dragged(x, y);
+	}
+	
+	public void finished(int record, Score score) {
+		canvas.back();
+		RecordState recordState = new RecordState("New record", canvas, record, score);
+		canvas.pushState(recordState);
 	}
 }

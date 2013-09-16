@@ -17,9 +17,9 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 	private MainCanvas canvas;
 	private Display display;
 	private Command back = new Command("Back", Command.BACK, 0);
-	
+
 	{
-	   	new Thread() {
+		new Thread() {
 			public void run() {
 				while (true) {
 					try {
@@ -28,13 +28,13 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 						e.printStackTrace();
 					}
 
-					System.out.println("" + (Runtime.getRuntime().freeMemory() / 1024) + "/" + (Runtime.getRuntime().totalMemory() /  1024));
+					System.out.println((Runtime.getRuntime().freeMemory() / 1024) + "/"
+							+ (Runtime.getRuntime().totalMemory() / 1024));
 				}
 			}
 		}.start();
-		}
-	
-	
+	}
+
 	public LoaderMain() {
 	}
 
