@@ -144,7 +144,7 @@ public class MainCanvas extends GameCanvas implements Runnable {
 			int posX = getWidth();
 			int posY = getHeight();
 			backVisible = true;
-			g.setColor(~0);
+			g.setColor(0xbafeff);
 			g.drawString(/*Translation.tr(*/"Back"/*)*/, posX, posY, Graphics.BOTTOM | Graphics.RIGHT);
 		} else
 			backVisible = false;

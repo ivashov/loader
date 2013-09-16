@@ -8,6 +8,9 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
+import com.nokia.mid.ui.DirectGraphics;
+import com.nokia.mid.ui.DirectUtils;
+
 import ikm.GameLevel;
 import ikm.GameState;
 import ikm.MainCanvas;
@@ -51,6 +54,7 @@ public class PlayState extends GameState {
 	
 	private int[] line = new int[4];
 	public void paint(Graphics g) {
+		DirectGraphics dg = DirectUtils.getDirectGraphics(g);
         int imgpos = Maths.clamp(Res.background.getHeight() - yPos - height, 0, Res.background.getHeight() - height);
         g.drawRegion(Res.background, 0, imgpos, width, height, 0, 0, 0, Graphics.TOP | Graphics.LEFT);
         
@@ -60,12 +64,13 @@ public class PlayState extends GameState {
         	box.paint(g, height, 0, yPos);
         }
         
-        scene.getJoint(line);
-        g.setColor(255, 0, 0);
-        g.drawLine(line[0], height - line[1] + yPos, line[2], height - line[3] + yPos);
-        
+        if (scene.isDragging()) {
+        	scene.getJoint(line);
+			dg.setARGBColor(0xaabaabff);
+        	g.drawLine(line[0], height - line[1] + yPos, line[2], height - line[3] + yPos);
+        }
         g.setFont(font);
-        g.setColor(~0);
+        g.setColor(0xbafeff);
         
 		super.paint(g);
         //g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);	
@@ -127,7 +132,9 @@ public class PlayState extends GameState {
 	
 	public void finished(int record, Score score) {
 		canvas.back();
-		RecordState recordState = new RecordState("New record", canvas, record, score);
-		canvas.pushState(recordState);
-	}
+		if (score.isTopN(record)) {
+			RecordState recordState = new RecordState("New record", canvas, record, score);
+			canvas.pushState(recordState);
+		}
+	} 
 }

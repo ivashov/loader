@@ -225,4 +225,8 @@ public class Scene {
 		}
 		return maxY;
 	}
+
+	public boolean isDragging() {
+		return dragedBox != null;
+	}
 }

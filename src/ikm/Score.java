@@ -125,13 +125,29 @@ public class Score {
 			scores.setSize(MAX_SCORES);
 	}
 	
+	public boolean isTopN(int score) {
+		loadScore();
+		
+		if (scores.size() < MAX_SCORES)
+			return true;
+		
+		for (int i = 0; i < scores.size(); i++) {
+			Item item = (Item) scores.elementAt(i);
+			if (item.score < score)
+				return true;
+		}
+
+		return false;
+	}
+	
 	public void paint(Graphics g, Font normalFont, Font boldFont, int pos1, int pos2, int x1, int y1) {
-		g.setColor(0xffffff);
+		g.setColor(~0);
 		g.setFont(boldFont);
 		g.drawString("Name", x1 + pos1, y1 + 5, Graphics.TOP | Graphics.LEFT);
 		g.drawString("Score", x1 + pos2, y1 + 5, Graphics.TOP | Graphics.RIGHT);
 		
 		g.setFont(normalFont);
+		g.setColor(0xbafeff);
 		int y = 5 + boldFont.getHeight();
 		for (int i = 0; i < scores.size(); i++) {
 			Item item = (Item) scores.elementAt(i);

@@ -25,7 +25,7 @@ public class TextOverlay extends Overlay {
 	}
 
 	public void paint(Graphics g) {
-		g.setColor(~0);
+		g.setColor(0xbafeff);
 		g.setFont(font);
 		g.drawString(str, x, y, align);
 	}

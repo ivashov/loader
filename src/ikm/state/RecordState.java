@@ -16,11 +16,11 @@ import ikm.state.play.SpriteListener;
 import ikm.state.play.SpriteOverlay;
 
 public class RecordState extends GameState implements SpriteListener {
-	private static final int GAMEOVER_POS = 5,
-			SCOREBOX_POS = 97,
-			LABEL_POS = 130,
-			INPUT_POS = 145,
-			OK_POS = 179;
+	private static final int GAMEOVER_POS = 5 + 8,
+			SCOREBOX_POS = 97 - 8,
+			LABEL_POS = 130 - 8,
+			INPUT_POS = 145 - 8,
+			OK_POS = 179 - 8;
 	
 	private int width, height;
 	
@@ -67,7 +67,7 @@ public class RecordState extends GameState implements SpriteListener {
 		
 		
 		g.setFont(largeFont);
-		g.setColor(0xffffff);
+		g.setColor(0xbafeff);
 		g.drawImage(Res.scoreBox, width / 2, SCOREBOX_POS, Graphics.HCENTER | Graphics.VCENTER);
 		g.drawString(String.valueOf(score), width / 2, SCOREBOX_POS + 7, Graphics.HCENTER | Graphics.BASELINE);
 		
