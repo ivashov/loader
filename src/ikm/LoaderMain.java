@@ -18,7 +18,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 	private Display display;
 	private Command back = new Command("Back", Command.BACK, 0);
 
-	{
+	/*{
 		new Thread() {
 			public void run() {
 				while (true) {
@@ -33,7 +33,7 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 				}
 			}
 		}.start();
-	}
+	}*/
 
 	public LoaderMain() {
 	}

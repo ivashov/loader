@@ -68,7 +68,7 @@ public class PlayState extends GameState {
         g.setColor(~0);
         
 		super.paint(g);
-        g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);	
+        //g.drawString("Render time: " + String.valueOf(System.currentTimeMillis() - ttt), 0, 0, Graphics.TOP | Graphics.LEFT);	
 	}
 
 	public int getUpdateRate() {

@@ -39,7 +39,7 @@ public class HighscoreState extends GameState {
 	}
 	
 	private Image generateTransparentImage() {
-		int h = normalFont.getHeight() * (Score.MAX_SCORES + 1);
+		int h = normalFont.getHeight() * Score.MAX_SCORES + 10 + boldFont.getHeight();
 		
 		x1 = width / 2 - 100;
 		int x2 = width / 2 + 100;

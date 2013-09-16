@@ -85,10 +85,10 @@ public class Score {
 			DataInputStream in = new DataInputStream(bin);
 			
 			int size = in.readInt();
-			scores.setSize(size);
+			scores.setSize(0);
 			for (int i = 0; i < size; i++) {
 				Item item = new Item();
-				scores.setElementAt(item, i);
+				insert(item);
 				item.name = in.readUTF();
 				item.score = in.readInt();
 				System.out.println("Load score: name = \"" + item.name + "\", score = " + item.score);
@@ -106,16 +106,21 @@ public class Score {
 		}
 	}
 	
-	private void sort(Vector v) {
-		int s = v.size();
-		
-		
+	private void insert(Item item) {
+		for (int i = 0; i < scores.size(); i++) {
+			Item item2 = (Item) scores.elementAt(i);
+			if (item.score > item2.score) {
+				scores.insertElementAt(item, i);
+				return;
+			}
+		}
+		scores.addElement(item);
 	}
 	
 	public void addRecord(String name, int score) {
 		System.out.println("Add score: name = \"" + name + "\", score = " + score);
-		scores.addElement(new Item(name, score));
-		sort(scores);
+		insert(new Item(name, score));
+		
 		if (scores.size() > MAX_SCORES)
 			scores.setSize(MAX_SCORES);
 	}

@@ -48,13 +48,6 @@ public class Scene {
 		return objects;
 	}
 	
-	private float fx2float(int fx) {
-		int intPart = fx >> FXUtil.DECIMAL;
-		int floatPart = fx & FXUtil.DECIMAL;
-		
-		return intPart + floatPart / (float) (1 << FXUtil.DECIMAL);
-	}
-	
 	private void updateObject(SceneObject object) {
 		Body body = (Body) object.getData();
 		
