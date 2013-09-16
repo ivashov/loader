@@ -9,6 +9,7 @@ public class Res {
 	public static Image scoreText;
 	public static Image exitText;
 	public static Image gameoverText;
+	public static Image aboutText;
 
 	public static Image scoreBox;
 	
@@ -22,6 +23,7 @@ public class Res {
 		scoreText = Image.createImage("/text/highscore.png");
 		exitText = Image.createImage("/text/exit.png");
 		gameoverText = Image.createImage("/text/gameover.png");
+		aboutText = Image.createImage("/text/about.png");
 	
 		scoreBox = Image.createImage("/score.png");
 		

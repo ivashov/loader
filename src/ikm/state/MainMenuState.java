@@ -18,6 +18,7 @@ public class MainMenuState extends GameState {
 	private Sprite scoreSprite = new Sprite(Res.scoreText);
 	private Sprite exitSprite = new Sprite(Res.exitText);
 	private Sprite logo = new Sprite(Res.logo);
+	private Sprite aboutSprite = new Sprite(Res.aboutText);
 	
 	private int width, height;
 	private LoaderMain main;
@@ -35,7 +36,9 @@ public class MainMenuState extends GameState {
 		width = canvas.getWidth();
 		height = canvas.getHeight();
 
-		addItem(newgameSprite, 128, new SpriteListener() {
+		int y = 100;
+		
+		addItem(newgameSprite, y, new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
 				GameState playState = new PlayState("Play", canvas, new TowerLevel(score));
 				canvas.pushState(playState);
@@ -44,7 +47,7 @@ public class MainMenuState extends GameState {
 			}
 		});
 		
-		addItem(scoreSprite, 128 + 48, new SpriteListener() {
+		addItem(scoreSprite, y + 48, new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
 				GameState state = new HighscoreState("Highscore", canvas, score);
 				canvas.pushState(state);
@@ -56,14 +59,23 @@ public class MainMenuState extends GameState {
 			}
 		});
 		
-		addItem(exitSprite, 128 + 48 * 2, new SpriteListener() {
+		addItem(aboutSprite, y + 48 * 2, new SpriteListener() {
+			public boolean clicked(Overlay sprite) {
+				GameState state = new AboutState("About", canvas);
+				canvas.pushState(state);
+
+				return true;
+			}
+		});
+		
+		addItem(exitSprite, y + 48 * 3, new SpriteListener() {
 			public boolean clicked(Overlay sprite) {
 				main.quit();
 				return false;
 			}
 		});
 		
-		addItem(logo, 32, null);
+		addItem(logo, 16, null);
 		
 		score.loadScore();
 	}
@@ -78,6 +90,7 @@ public class MainMenuState extends GameState {
 		scoreSprite.paint(g);
 		exitSprite.paint(g);
 		logo.paint(g);
+		aboutSprite.paint(g);
 		
 		g.drawImage(Res.boxImage, 0, height - 10, Graphics.BOTTOM | Graphics.LEFT);
 		g.drawImage(Res.boxImage, width, height - 10, Graphics.BOTTOM | Graphics.RIGHT);

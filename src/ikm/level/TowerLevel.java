@@ -68,7 +68,7 @@ public class TowerLevel extends GameLevel {
 				scoreOverlay.setText("Height: " + maxHeight);
 			}
 			
-			if (maxHeight - height > 100) {
+			if (maxHeight - height > 200 && maxHeight > 300) {
 				state.finished(maxHeight, score);
 			}
 		}
