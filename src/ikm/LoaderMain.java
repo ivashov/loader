@@ -82,8 +82,18 @@ public class LoaderMain extends MIDlet implements Application, CommandListener {
 		
 	}
 
+	private boolean noHardwareBack = false;
+	{
+        String keyboard = System.getProperty("com.nokia.keyboard.type");
+        if (keyboard != null && keyboard.equalsIgnoreCase("OnekeyBack")) {
+        	noHardwareBack = false;
+        } else {
+        	noHardwareBack = true;
+        }
+	}
+	
 	public boolean hasHardwareBack() {
-		return false;
+		return !noHardwareBack;
 	}
 
 	public void commandAction(Command c, Displayable d) {
