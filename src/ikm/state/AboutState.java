@@ -32,7 +32,9 @@ public class AboutState extends GameState {
 		g.drawString("Version: 0.0.1", x, y += 32, Graphics.TOP | Graphics.HCENTER);
 		g.drawString("Kirill Ivashov", x, y += 32, Graphics.TOP | Graphics.HCENTER);
 		g.drawString("ivashov@cs.karelia.ru", x, y += 32, Graphics.TOP | Graphics.HCENTER);
-		
+		g.drawString("Application uses", x, y += 36, Graphics.TOP | Graphics.HCENTER);
+		g.drawString("Emini physics library", x, y += 24, Graphics.TOP | Graphics.HCENTER);
+
 		super.paint(g);
 	}
 

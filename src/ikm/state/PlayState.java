@@ -122,6 +122,8 @@ public class PlayState extends GameState {
 			yPos += y - dragStartY;
 			if (yPos < 0)
 				yPos = 0;
+			if (yPos > Res.background.getHeight() - height)
+				yPos = Res.background.getHeight() - height;
 			
 			dragStartY = y;
 			dragStartX = x;
